@@ -77,19 +77,49 @@ const getUser = new Promise(function (todoBien, todoMal) {
         console.log("Error :(")
     }); */
 
-(async function load (){
-    async function getData (URL){
-        const request= await fetch(URL);
-        const data= await request.json();
+(async function load() {
+    async function getData(URL) {
+        const request = await fetch(URL); //Realiza una petición a la URL
+        const data = await request.json();
         return data;
     }
-    
+
     //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
-    const actionList= await getData("https://yts.am/api/v2/list_movies.json?genre=action");
-    const dramaList= await getData("https://yts.am/api/v2/list_movies.json?genre=drama");
-    const animationList= await getData("https://yts.am/api/v2/list_movies.json?genre=animation");
+    const actionList = await getData("https://yts.am/api/v2/list_movies.json?genre=action");
+    const dramaList = await getData("https://yts.am/api/v2/list_movies.json?genre=drama");
+    const animationList = await getData("https://yts.am/api/v2/list_movies.json?genre=animation");
 
     console.log("actionList", actionList);
     console.log("dramaList", dramaList);
     console.log("animationList", animationList);
-})()
+
+    const $animationContainer = document.getElementById("animation");
+    const $actionContainer = document.getElementById("action");
+    const $dramaContainer = document.getElementById("#drama"); //Otra forma de nombrarlo, aunque más larga
+
+    const $modal = document.getElementById("modal");
+    const $overlay = document.getElementById("overlay");
+    const $home = document.getElementById("home");
+
+    const $modalTittle = $modal.querySelector("h1");
+    const $modalDescription = $modal.querySelector("p");
+    const $modalImage = $modal.querySelector("img");
+
+    const $featuringContainer = document.getElementById("featuring");
+    const $form = document.getElementById("form");
+
+})();
+
+
+/* (async function jili (){
+    async function getUser (URL){
+        const request= await fetch(URL); //Realiza una petición a la URL
+        const data= await request.json();
+        return data;
+    }
+
+    //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
+    const actionList= await getUser("https://swapi.co/api/people/1");
+
+    console.log("user", actionList);
+})(); */
