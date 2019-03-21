@@ -89,9 +89,27 @@ const getUser = new Promise(function (todoBien, todoMal) {
     const dramaList = await getData("https://yts.am/api/v2/list_movies.json?genre=drama");
     const animationList = await getData("https://yts.am/api/v2/list_movies.json?genre=animation");
 
-    console.log("actionList", actionList);
-    console.log("dramaList", dramaList);
-    console.log("animationList", animationList);
+    videoItemTemplate = (movie) => {
+        return (
+            `<div class="primaryPlaylistItem">
+                < div class="primaryPlaylistItem-image" >
+                    <img src="${movie.medium_cover_image}">
+                </div>
+                h4 class="primaryPlaylistItem-title">
+                    ${movie.title}
+                </h4>
+            </div > `
+        )
+    }
+
+    actionList.data.movies.forEach((movie)=>{
+        const htmlString = videoItemTemplate(movie);
+        console.log(htmlString);
+    })
+
+    /*     console.log("actionList", actionList);
+        console.log("dramaList", dramaList);
+        console.log("animationList", animationList); */
 
     const $animationContainer = document.getElementById("animation");
     const $actionContainer = document.getElementById("action");
