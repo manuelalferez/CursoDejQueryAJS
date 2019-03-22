@@ -92,28 +92,36 @@ const getUser = new Promise(function (todoBien, todoMal) {
     videoItemTemplate = (movie) => {
         return (
             `<div class="primaryPlaylistItem">
-                < div class="primaryPlaylistItem-image" >
-                    <img src="${movie.medium_cover_image}">
+                <div class="primaryPlaylistItem-image">
+                <img src="${movie.medium_cover_image}">
                 </div>
-                h4 class="primaryPlaylistItem-title">
-                    ${movie.title}
+                <h4 class="primaryPlaylistItem-title">
+                ${movie.title}
                 </h4>
-            </div > `
+            </div>`
         )
     }
 
-    actionList.data.movies.forEach((movie)=>{
+    const $animationContainer = document.getElementById("animation");
+    const $actionContainer = document.getElementById("action");
+    const $dramaContainer = document.getElementById("#drama"); //Otra forma de nombrarlo, aunque más larga
+
+    actionList.data.movies.forEach((movie) => {
+/*      
+        Otra forma:
         const htmlString = videoItemTemplate(movie);
-        console.log(htmlString);
+        const html = document.implementation.createHTMLDocument();
+        html.body.innerHTML = htmlString;
+        $actionContainer.append(html.body.children[0]); */
+        const htmlString = videoItemTemplate(movie);
+        $actionContainer.innerHTML+=htmlString;
+/*         console.log($actionContainer); */
     })
 
     /*     console.log("actionList", actionList);
         console.log("dramaList", dramaList);
         console.log("animationList", animationList); */
 
-    const $animationContainer = document.getElementById("animation");
-    const $actionContainer = document.getElementById("action");
-    const $dramaContainer = document.getElementById("#drama"); //Otra forma de nombrarlo, aunque más larga
 
     const $modal = document.getElementById("modal");
     const $overlay = document.getElementById("overlay");
