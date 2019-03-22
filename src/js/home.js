@@ -102,26 +102,28 @@ const getUser = new Promise(function (todoBien, todoMal) {
         )
     }
 
-    const $animationContainer = document.getElementById("animation");
-    const $actionContainer = document.getElementById("action");
-    const $dramaContainer = document.getElementById("#drama"); //Otra forma de nombrarlo, aunque más larga
-
-    actionList.data.movies.forEach((movie) => {
-/*      
-        Otra forma:
-        const htmlString = videoItemTemplate(movie);
+    createTemplateHTML = (htmlString) => {
         const html = document.implementation.createHTMLDocument();
         html.body.innerHTML = htmlString;
-        $actionContainer.append(html.body.children[0]); */
-        const htmlString = videoItemTemplate(movie);
-        $actionContainer.innerHTML+=htmlString;
-/*         console.log($actionContainer); */
-    })
+        return html.body.children[0];
+    }
 
-    /*     console.log("actionList", actionList);
-        console.log("dramaList", dramaList);
-        console.log("animationList", animationList); */
+    renderMovieList = (list, $container) => {
+        $container.children[0].remove();
+        list.forEach((movie) => {
+            const htmlString = videoItemTemplate(movie);
+            $container.append(createTemplateHTML(htmlString));
+        })
+    }
 
+    const $animationContainer = document.getElementById("animation");
+    renderMovieList(animationList.data.movies, $animationContainer);
+
+    const $actionContainer = document.getElementById("action");
+    renderMovieList(actionList.data.movies, $actionContainer);
+
+    const $dramaContainer = document.querySelector("#drama"); //Otra forma de nombrarlo, aunque más larga
+    renderMovieList(dramaList.data.movies, $dramaContainer);
 
     const $modal = document.getElementById("modal");
     const $overlay = document.getElementById("overlay");
