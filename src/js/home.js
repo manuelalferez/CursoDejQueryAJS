@@ -56,22 +56,21 @@
         $featuringContainer.innerHTML = featuringTemplate(pelis[0]);
     })
 
-    //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
-    const {
-        data: {
-            movies: actionList
-        }
-    } = await getData(`${BASE_API}list_movies.json?genre=action`);
-    const {
-        data: {
-            movies: dramaList
-        }
-    } = await getData(`${BASE_API}list_movies.json?genre=drama`);
-    const {
-        data: {
-            movies: animationList
-        }
-    } = await getData(`${BASE_API}list_movies.json?genre=animation`);
+    renderMovieList = (list, $container, category) => {
+        $container.children[0].remove();
+        list.forEach((movie) => {
+            const htmlString = videoItemTemplate(movie, category);
+            const movieElement = createTemplateHTML(htmlString);
+            $container.append(movieElement);
+            const image = movieElement.querySelector("img");
+            image.addEventListener("load", (event) => {
+                /*   image.classList.add("fadeIn"); */
+                event.srcElement.classList.add("fadeIn");
+            })
+            /*  movieElement.classList.add("fadeIn"); */ //Se aplica a todo el contexto la animación
+            addEventClick(movieElement);
+        })
+    }
 
     videoItemTemplate = (movie, category) => {
         return (
@@ -99,7 +98,7 @@
     }
 
     findById = (list, id) => {
-        return list.find(movie=> movie.id === id);
+        return list.find(movie => movie.id === id);
     }
 
     findMovie = (id, category) => {
@@ -110,7 +109,7 @@
             case "animation": {
                 return findById(animationList, id);
             }
-            default:{
+            default: {
                 return findById(dramaList, id);
             }
         }
@@ -132,24 +131,18 @@
         $modal.style.animation = 'modalOut .8s forwards';
     }
 
-    renderMovieList = (list, $container, category) => {
-        $container.children[0].remove();
-        list.forEach((movie) => {
-            const htmlString = videoItemTemplate(movie, category);
-            const movieElement = createTemplateHTML(htmlString);
-            $container.append(movieElement);
-            addEventClick(movieElement);
-        })
-    }
-
-    const $animationContainer = document.getElementById("animation");
-    renderMovieList(animationList, $animationContainer, "animation");
-
+    //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
+    const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`);
     const $actionContainer = document.getElementById("action");
     renderMovieList(actionList, $actionContainer, "action");
 
+    const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`);
     const $dramaContainer = document.querySelector("#drama"); //Otra forma de nombrarlo, aunque más larga
     renderMovieList(dramaList, $dramaContainer, "drama");
+
+    const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`);
+    const $animationContainer = document.getElementById("animation");
+    renderMovieList(animationList, $animationContainer, "animation");
 
     $hideModal.addEventListener("click", hideModal);
 })();
