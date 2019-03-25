@@ -2,7 +2,8 @@
     async function getData(URL) {
         const request = await fetch(URL); //Realiza una petición a la URL
         const data = await request.json();
-        return data;
+        if (data.data.movie_count > 0) return data;
+        throw new Error('No se encontró ningun resultado');
     }
 
     const $form = document.getElementById("form");
@@ -46,14 +47,22 @@
             height: "50",
             widht: "50"
         })
+
         $featuringContainer.append($loader);
-        const data = new FormData($form); //Datos suministrados por el formulario
-        const {
-            data: {
-                movies: pelis
-            }
-        } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get("name")}`); //Nos traemos la película de la API de películas
-        $featuringContainer.innerHTML = featuringTemplate(pelis[0]);
+
+        try {
+            const data = new FormData($form); //Datos suministrados por el formulario
+            const {
+                data: {
+                    movies: pelis
+                }
+            } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get("name")}`); //Nos traemos la película de la API de películas
+            $featuringContainer.innerHTML = featuringTemplate(pelis[0]);
+        } catch(error){
+            alert(error.message);
+            $home.classList.remove("search-active");
+            $loader.remove();
+        }
     })
 
     renderMovieList = (list, $container, category) => {
