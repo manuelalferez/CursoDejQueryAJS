@@ -142,14 +142,17 @@
 
     //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
     const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`);
+    localStorage.setItem("actionList", JSON.stringify(actionList));
     const $actionContainer = document.getElementById("action");
     renderMovieList(actionList, $actionContainer, "action");
 
     const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`);
+    localStorage.setItem("dramaList", JSON.stringify(dramaList));
     const $dramaContainer = document.querySelector("#drama"); //Otra forma de nombrarlo, aunque más larga
     renderMovieList(dramaList, $dramaContainer, "drama");
 
     const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`);
+    localStorage.setItem("animationList", JSON.stringify(animationList));
     const $animationContainer = document.getElementById("animation");
     renderMovieList(animationList, $animationContainer, "animation");
 
