@@ -48,8 +48,12 @@
         })
         $featuringContainer.append($loader);
         const data = new FormData($form); //Datos suministrados por el formulario
-        const peli = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get("name")}`); //Nos traemos la película de la API de películas
-        $featuringContainer.innerHTML = featuringTemplate(peli.data.movies[0]);
+        const {
+            data: {
+                movies: pelis
+            }
+        } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get("name")}`); //Nos traemos la película de la API de películas
+        $featuringContainer.innerHTML = featuringTemplate(pelis[0]);
     })
 
     //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
