@@ -57,9 +57,21 @@
     })
 
     //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
-    const actionList = await getData(`${BASE_API}list_movies.json?genre=action`);
-    const dramaList = await getData(`${BASE_API}list_movies.json?genre=drama`);
-    const animationList = await getData(`${BASE_API}list_movies.json?genre=animation`);
+    const {
+        data: {
+            movies: actionList
+        }
+    } = await getData(`${BASE_API}list_movies.json?genre=action`);
+    const {
+        data: {
+            movies: dramaList
+        }
+    } = await getData(`${BASE_API}list_movies.json?genre=drama`);
+    const {
+        data: {
+            movies: animationList
+        }
+    } = await getData(`${BASE_API}list_movies.json?genre=animation`);
 
     videoItemTemplate = (movie, category) => {
         return (
@@ -86,11 +98,33 @@
         })
     }
 
+    findById = (list, id) => {
+        return list.find(movie=> movie.id === id);
+    }
+
+    findMovie = (id, category) => {
+        switch (category) {
+            case "action": {
+                return findById(actionList, id);
+            }
+            case "animation": {
+                return findById(animationList, id);
+            }
+            default:{
+                return findById(dramaList, id);
+            }
+        }
+    }
+
     showModal = ($element) => {
         $overlay.classList.add("active");
         $modal.style.animation = 'modalIn .8s forwards';
-        const id = $element.dataset.id;
+        const id = parseInt($element.dataset.id);
         const category = $element.dataset.category;
+        const data = findMovie(id, category);
+        $modalTittle.textContent = data.title;
+        $modalDescription.textContent = data.description_full;
+        $modalImage.setAttribute("src", data.medium_cover_image);
     }
 
     hideModal = () => {
@@ -109,13 +143,13 @@
     }
 
     const $animationContainer = document.getElementById("animation");
-    renderMovieList(animationList.data.movies, $animationContainer, "animation");
+    renderMovieList(animationList, $animationContainer, "animation");
 
     const $actionContainer = document.getElementById("action");
-    renderMovieList(actionList.data.movies, $actionContainer, "action");
+    renderMovieList(actionList, $actionContainer, "action");
 
     const $dramaContainer = document.querySelector("#drama"); //Otra forma de nombrarlo, aunque más larga
-    renderMovieList(dramaList.data.movies, $dramaContainer, "drama");
+    renderMovieList(dramaList, $dramaContainer, "drama");
 
     $hideModal.addEventListener("click", hideModal);
 })();
