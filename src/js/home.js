@@ -140,19 +140,28 @@
         $modal.style.animation = 'modalOut .8s forwards';
     }
 
+    async function cacheExist (category) {
+        const listName = `${category}List`;
+        const cacheList = localStorage.getItem(listName); //Objeto
+
+        if(cacheList){
+            return JSON.parse(cacheList);
+        }
+        const { data: { movies: data }}=  await getData(`${BASE_API}list_movies.json?genre=${category}`);
+        localStorage.setItem(listName, JSON.stringify(data));
+        return data;
+    }
+
     //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
-    const { data: { movies: actionList } } = await getData(`${BASE_API}list_movies.json?genre=action`);
-    localStorage.setItem("actionList", JSON.stringify(actionList));
+    const actionList = await cacheExist("action");
     const $actionContainer = document.getElementById("action");
     renderMovieList(actionList, $actionContainer, "action");
 
-    const { data: { movies: dramaList } } = await getData(`${BASE_API}list_movies.json?genre=drama`);
-    localStorage.setItem("dramaList", JSON.stringify(dramaList));
+    const dramaList = await cacheExist("drama");;
     const $dramaContainer = document.querySelector("#drama"); //Otra forma de nombrarlo, aunque más larga
     renderMovieList(dramaList, $dramaContainer, "drama");
 
-    const { data: { movies: animationList } } = await getData(`${BASE_API}list_movies.json?genre=animation`);
-    localStorage.setItem("animationList", JSON.stringify(animationList));
+    const animationList = await cacheExist("animation");;
     const $animationContainer = document.getElementById("animation");
     renderMovieList(animationList, $animationContainer, "animation");
 
