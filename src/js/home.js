@@ -15,9 +15,22 @@
     const $modalImage = $modal.querySelector("img");
     const $featuringContainer = document.getElementById("featuring");
 
+    setAttributes = ($element, attributes) =>{
+        for (const attribute in attributes){
+            $element.setAttribute(attribute, attributes[attribute]); // (height, attributes[height]= 50)
+        }
+    }
+
     $form.addEventListener("submit", (event)=>{
         event.preventDefault(); // Con esto conseguimos que no se recargue la página cada vez que realizamos una entrada. Aumentamos el rendimiento 
         $home.classList.add("search-active");
+        $loader= document.createElement("img");
+        setAttributes($loader, {
+            src: "src/images/loader.gif",
+            height: "50", 
+            widht: "50"
+        })
+        $featuringContainer.append($loader);
     })
 
     //await: indica que se debe de terminar con el fragmento de código para continuar con la ejecución de la función.
